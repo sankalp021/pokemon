@@ -70,6 +70,7 @@ pokemon-explorer/
 │   │   ├── PokedexGrid.tsx   # Displays the grid of Pokémon cards
 │   │   ├── PokemonCard.tsx   # Displays individual Pokémon details
 │   │   ├── PokemonTypeFilter.tsx   # Handles type-based filtering
+│   │   ├── PokemonDetailsModal.tsx   # Displays Details of the pokemon
 │   ├── hooks/
 │   │   └── usePokemonData.ts   # Custom hook for fetching Pokémon data
 ├── public/                   # Static assets (images, etc.)
