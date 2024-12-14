@@ -11,12 +11,12 @@ const fetchPokemonData = async (page: number): Promise<Pokemon[]> => {
   );
 
   const pokemonDetails: Pokemon[] = await Promise.all(
-    data.results.map(async (pokemon: any) => {
+    data.results.map(async (pokemon: { url: string }) => {
       const details = await axios.get(pokemon.url);
       return {
         id: details.data.id,
         name: details.data.name,
-        types: details.data.types.map((t: any) => t.type.name),
+        types: details.data.types.map((t: { type: { name: string } }) => t.type.name),
         sprite: details.data.sprites.front_default,
       };
     })

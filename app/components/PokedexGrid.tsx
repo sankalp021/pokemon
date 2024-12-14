@@ -47,7 +47,7 @@ const PokedexGrid: React.FC = () => {
               id: details.id,
               name: details.name,
               sprite: details.sprites.front_default,
-              types: details.types.map((type: any) => type.type.name),
+              types: details.types.map((type: { type: { name: string } }) => type.type.name),
             };
           })
         );
@@ -102,10 +102,10 @@ const PokedexGrid: React.FC = () => {
         id: details.id,
         name: details.name,
         sprite: details.sprites.front_default,
-        types: details.types.map((type: any) => type.type.name),
+        types: details.types.map((type: { type: { name: string } }) => type.type.name),
         height: details.height,
         weight: details.weight,
-        abilities: details.abilities.map((ability: any) => ability.ability.name),
+        abilities: details.abilities.map((ability: { ability: { name: string } }) => ability.ability.name),
       };
       setSelectedPokemon(pokemonDetails);
       setIsModalOpen(true);
