@@ -4,8 +4,15 @@ import PokemonCard from "./PokemonCard";
 import PokemonTypeFilter from "./PokemonTypeFilter";
 
 const PokedexGrid: React.FC = () => {
-  const [allPokemon, setAllPokemon] = useState<any[]>([]);
-  const [filteredPokemon, setFilteredPokemon] = useState<any[]>([]);
+  interface Pokemon {
+    id: number;
+    name: string;
+    sprite: string;
+    types: string[];
+  }
+
+  const [allPokemon, setAllPokemon] = useState<Pokemon[]>([]);
+  const [filteredPokemon, setFilteredPokemon] = useState<Pokemon[]>([]);
   const [availableTypes, setAvailableTypes] = useState<string[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState(""); // Track the search query
@@ -19,14 +26,19 @@ const PokedexGrid: React.FC = () => {
         const data = await response.json();
 
         const detailedPokemon = await Promise.all(
-          data.results.map(async (pokemon: any) => {
+          data.results.map(async (pokemon: { url: string; name: string }) => {
             const res = await fetch(pokemon.url);
-            const details = await res.json();
+            const details: {
+              id: number;
+              name: string;
+              sprites: { front_default: string };
+              types: { type: { name: string } }[];
+            } = await res.json();
             return {
               id: details.id,
               name: details.name,
               sprite: details.sprites.front_default,
-              types: details.types.map((type: any) => type.type.name),
+              types: details.types.map((type: { type: { name: string } }) => type.type.name),
             };
           })
         );
