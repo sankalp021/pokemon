@@ -22,7 +22,7 @@ const PokedexGrid: React.FC = () => {
   const [filteredPokemon, setFilteredPokemon] = useState<Pokemon[]>([]);
   const [availableTypes, setAvailableTypes] = useState<string[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [searchQuery, setSearchQuery] = useState(""); // Track the search query
+  const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const [selectedPokemon, setSelectedPokemon] = useState<PokemonDetails | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -160,7 +160,7 @@ const PokedexGrid: React.FC = () => {
         </span>
         <button
           className="px-6 py-3 bg-blue-500 text-white rounded-full font-semibold shadow-md hover:bg-blue-600 disabled:opacity-50 transition-all duration-300"
-          disabled={page * pokemonsPerPage >= filteredPokemon.length}
+          disabled={(page - 1) * pokemonsPerPage + paginatedPokemon.length >= filteredPokemon.length}
           onClick={() => setPage((prev) => prev + 1)}
         >
           Next
