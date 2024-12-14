@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import PokemonCard from "./PokemonCard";
 import PokemonTypeFilter from "./PokemonTypeFilter";
+import PokemonDetailsModal from "./PokemonDetailsModal";
 
 const PokedexGrid: React.FC = () => {
   interface Pokemon {
@@ -11,12 +12,20 @@ const PokedexGrid: React.FC = () => {
     types: string[];
   }
 
+  interface PokemonDetails extends Pokemon {
+    height: number;
+    weight: number;
+    abilities: string[];
+  }
+
   const [allPokemon, setAllPokemon] = useState<Pokemon[]>([]);
   const [filteredPokemon, setFilteredPokemon] = useState<Pokemon[]>([]);
   const [availableTypes, setAvailableTypes] = useState<string[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState(""); // Track the search query
   const [page, setPage] = useState(1);
+  const [selectedPokemon, setSelectedPokemon] = useState<PokemonDetails | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const pokemonsPerPage = 20;
 
   useEffect(() => {
@@ -26,7 +35,7 @@ const PokedexGrid: React.FC = () => {
         const data = await response.json();
 
         const detailedPokemon = await Promise.all(
-          data.results.map(async (pokemon: { url: string; name: string }) => {
+          data.results.map(async (pokemon: { url: string }) => {
             const res = await fetch(pokemon.url);
             const details: {
               id: number;
@@ -38,7 +47,7 @@ const PokedexGrid: React.FC = () => {
               id: details.id,
               name: details.name,
               sprite: details.sprites.front_default,
-              types: details.types.map((type: { type: { name: string } }) => type.type.name),
+              types: details.types.map((type: any) => type.type.name),
             };
           })
         );
@@ -85,6 +94,26 @@ const PokedexGrid: React.FC = () => {
     setPage(1); // Reset pagination to the first page when filters or search changes
   }, [selectedTypes, searchQuery, allPokemon]);
 
+  const handleViewDetails = async (id: number) => {
+    try {
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+      const details = await response.json();
+      const pokemonDetails: PokemonDetails = {
+        id: details.id,
+        name: details.name,
+        sprite: details.sprites.front_default,
+        types: details.types.map((type: any) => type.type.name),
+        height: details.height,
+        weight: details.weight,
+        abilities: details.abilities.map((ability: any) => ability.ability.name),
+      };
+      setSelectedPokemon(pokemonDetails);
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error("Error fetching Pokémon details:", error);
+    }
+  };
+
   const paginatedPokemon = filteredPokemon.slice(
     (page - 1) * pokemonsPerPage,
     page * pokemonsPerPage
@@ -99,7 +128,7 @@ const PokedexGrid: React.FC = () => {
           placeholder="Search Pokémon by name"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-4 py-2 border border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
 
@@ -113,7 +142,7 @@ const PokedexGrid: React.FC = () => {
       {/* Pokémon Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-6">
         {paginatedPokemon.map((pokemon) => (
-          <PokemonCard key={pokemon.id} {...pokemon} />
+          <PokemonCard key={pokemon.id} {...pokemon} onViewDetails={handleViewDetails} />
         ))}
       </div>
 
@@ -137,6 +166,13 @@ const PokedexGrid: React.FC = () => {
           Next
         </button>
       </div>
+
+      {/* Pokémon Details Modal */}
+      <PokemonDetailsModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        pokemon={selectedPokemon}
+      />
     </div>
   );
 };

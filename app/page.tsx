@@ -8,7 +8,9 @@ const Home = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Pokemon Explorer</h1>
+      <h1 className="text-4xl font-extrabold mb-8 text-center text-gray-300">
+        Pokémon Explorer
+      </h1>
       <PokemonTypeFilter
         availableTypes={[
           
