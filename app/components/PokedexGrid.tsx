@@ -128,7 +128,7 @@ const PokedexGrid: React.FC = () => {
           placeholder="Search Pokémon by name"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-4 py-2 border border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 placeholder-gray-600"
         />
       </div>
 
