@@ -5,6 +5,7 @@ import PokemonTypeFilter from "./PokemonTypeFilter";
 import PokemonDetailsModal from "./PokemonDetailsModal";
 
 const PokedexGrid: React.FC = () => {
+  // Define interfaces for Pokemon and PokemonDetails
   interface Pokemon {
     id: number;
     name: string;
@@ -31,7 +32,7 @@ const PokedexGrid: React.FC = () => {
   useEffect(() => {
     const fetchPokemon = async () => {
       try {
-        const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=200");
+        const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=400");
         const data = await response.json();
 
         const detailedPokemon = await Promise.all(

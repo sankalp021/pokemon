@@ -22,7 +22,7 @@ const PokemonDetailsModal: React.FC<PokemonDetailsModalProps> = ({ isOpen, onClo
       <div className="bg-white p-6 rounded-lg shadow-lg w-96">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-semibold text-gray-800 capitalize">{pokemon.name}</h2>
-          <button onClick={onClose} className="text-gray-600 hover:text-gray-800">&times;</button>
+            <button onClick={onClose} className="text-gray-600 hover:text-gray-800 text-3xl">&times;</button>
         </div>
         <div className="flex justify-center mb-4">
           <img src={pokemon.sprite} alt={pokemon.name} className="w-32 h-32 rounded-full object-cover border-4 border-gray-300" />
